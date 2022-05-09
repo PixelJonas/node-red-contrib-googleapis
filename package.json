@@ -1,7 +1,7 @@
 {
-  "name": "node-red-contrib-MY_NODESET_NAME",
+  "name": "node-red-contrib-gcal",
   "version": "0.2.3",
-  "description": "Description of the node set here",
+  "description": "Adds nodes to work with the google calendars API",
   "scripts": {
     "add-node": "node ./utils/add-node.js",
     "copy": "copyfiles -u 2 \"./src/nodes/**/*.{png,svg}\" \"./dist/nodes/\"",
@@ -16,14 +16,20 @@
     "lint": "prettier --ignore-path .eslintignore --check '**/*.{js,ts,md}'; eslint --ext .js,.ts .",
     "lint:fix": "prettier --ignore-path .eslintignore --write '**/*.{js,ts,md}'; eslint --ext .js,.ts . --fix"
   },
-  "author": "Alex Kaul",
+  "author": "Jonas Janz",
   "license": "MIT",
   "node-red": {
     "nodes": {
-      "transform-text": "./dist/nodes/transform-text/transform-text.js"
+      "google-credentials": "./dist/nodes/google-credentials/google-credentials.js",
+      "google-operation": "./dist/nodes/google-operation/google-operation.js"
     }
   },
-  "dependencies": {},
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "googleapis": "^100.0.0",
+    "lodash": "^4.17.21",
+    "uuid": "^8.3.2"
+  },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.0.0",
     "@types/express": "^4.17.9",
@@ -35,6 +41,8 @@
     "@types/supertest": "^2.0.10",
     "@typescript-eslint/eslint-plugin": "^4.9.0",
     "@typescript-eslint/parser": "^4.9.0",
+    "@types/lodash": "^4.14.182",
+    "@types/uuid": "^8.3.4",
     "colorette": "^1.2.1",
     "concurrently": "^5.3.0",
     "copyfiles": "^2.4.1",

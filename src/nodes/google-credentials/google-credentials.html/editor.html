@@ -1,0 +1,47 @@
+<script type="text/x-red" data-template-name="google-credentials">
+  <div id="node-config-google-client-keys">
+    <div class="form-row">
+      <label for="node-config-input-loginType"><i class="fa fa-plug"></i> Login Type</label>
+      <select type="text" id="node-config-input-loginType" style="width:70%">
+        <option value="oauth">OAuth2</option>
+      </select>
+    </div>
+    <div class="form-tips" id="node-config-google-tooltip">      
+    </div>
+    <div class="form-row">
+      <label for="node-config-input-username"><i class="fa fa-bookmark"></i> User Name</label>
+      <input type="text" id="node-config-input-username" placeholder="example@example.com" />
+    </div>
+    <div class="form-row input-apiKey-row">
+      <label for="node-config-input-apiKey"><i class="fa fa-bookmark"></i> API Key</label>
+      <input type="password" id="node-config-input-apiKey" />
+    </div>
+    <div class="form-row input-clientId-row">
+      <label for="node-config-input-clientId"><i class="fa fa-bookmark"></i> Client Id</label>
+      <input type="password" id="node-config-input-clientId" />
+    </div>
+    <div class="form-row input-clientSecret-row">
+      <label for="node-config-input-clientSecret"><i class="fa fa-lock"></i> Client Secret</label>
+      <input type="password" id="node-config-input-clientSecret" />
+    </div>
+    <div class="form-row input-scopes-row">
+      <label for="node-config-input-scopes"><i class="fa fa-bookmark"></i> Scopes</label>
+      <input type="text" id="node-config-input-scopes" placeholder="https://www.googleapis.com/auth/classroom.courses" />
+    </div>
+    <div class="form-row input-startauth-row">
+      <label>&nbsp;</label>
+      <a class="btn" id="node-config-start-auth" href="#" target="_blank">Authenticate with Google</a>
+    </div>
+  </div>
+  <div id="node-config-google">
+    <div class="form-row">
+        <label><i class="fa fa-user"></i> User</label>
+        <span id="node-config-google-username" class="input-xlarge uneditable-input"></span>
+    </div>
+    <input type="hidden" id="node-config-input-userId">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="google-credentials" data-lang="en-US">
+
+</script>
