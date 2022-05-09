@@ -42,7 +42,7 @@ RED.nodes.registerType<GoogleOperationEditorNodeProperties>(
     icon: 'google.png',
     paletteLabel: 'google operation',
     label: function () {
-      return this.name || 'Google Operation';
+      return this.name || 'RAW Google Operation';
     },
     labelStyle: function () {
       return this.name ? 'node_label_italic' : '';
