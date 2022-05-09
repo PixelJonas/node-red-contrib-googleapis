@@ -1,3 +1,3 @@
 export interface GoogleCalendarOptions {
-  // node options
+  nextDays: string;
 }

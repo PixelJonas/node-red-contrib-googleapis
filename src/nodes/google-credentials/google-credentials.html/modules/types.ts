@@ -1,15 +1,15 @@
-import { EditorNodeProperties } from 'node-red';
+import { EditorNodeProperties } from "node-red";
 
 export interface GoogleCredentialsEditorNodeProperties
   extends EditorNodeProperties,
     GoogleCredentialsOptions {
-  loginType: 'oauth';
+  loginType: "oauth";
   username?: string;
   credentials?: GoogleCredentialsOptions;
 }
 
 export interface GoogleCredentialsOptions {
-  loginType: 'oauth';
+  loginType: "oauth";
   apiKey?: string;
   clientId?: string;
   scopes?: string;

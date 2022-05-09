@@ -1,19 +1,20 @@
-import { EditorRED } from "node-red";
-import { GoogleCalendarEditorNodeProperties } from "./modules/types";
+import { EditorRED } from 'node-red';
+import { GoogleCalendarEditorNodeProperties } from './modules/types';
 
 declare const RED: EditorRED;
 
-RED.nodes.registerType<GoogleCalendarEditorNodeProperties>("google-calendar", {
-  category: "function",
-  color: "#a6bbcf",
+RED.nodes.registerType<GoogleCalendarEditorNodeProperties>('google-calendar', {
+  category: 'function',
+  color: '#a6bbcf',
   defaults: {
-    name: { value: "" },
+    name: { value: '' },
+    nextDays: { value: '' },
   },
   inputs: 1,
   outputs: 1,
-  icon: "font-awesome/fa-calendar",
-  paletteLabel: "google calendar",
+  icon: 'font-awesome/fa-calendar',
+  paletteLabel: 'google calendar',
   label: function () {
-    return this.name || "google calendar";
+    return this.name || 'google calendar';
   },
 });

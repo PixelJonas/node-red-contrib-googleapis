@@ -1,11 +1,11 @@
-import { google } from 'googleapis';
-import { Node, NodeMessageInFlow } from 'node-red';
+import { google } from "googleapis";
+import { Node, NodeMessageInFlow } from "node-red";
 import {
   GoogleOperationMessage,
   GoogleOperationOptions,
-} from '../google-operation/shared/types';
-import NodeUtils from './NodeUtils';
-import { GoogleCredentialsNode } from './types';
+} from "../google-operation/shared/types";
+import NodeUtils from "./NodeUtils";
+import { GoogleCredentialsNode } from "./types";
 
 export default class GoogleService {
   googleCredentials: GoogleCredentialsNode;
@@ -25,23 +25,23 @@ export default class GoogleService {
     this.config = config;
   }
 
-  login(msg: NodeMessageInFlow) {
+  login(msg: NodeMessageInFlow): void {
     this.googleCredentials.login(msg, async (err: any, conn: any) => {
-      let message = (msg as unknown) as GoogleOperationMessage;
+      const message = (msg as unknown) as GoogleOperationMessage;
       if (err) {
         console.log(err);
         return this.sendMsg(err, null);
       }
 
-      let apiGoogle = message.api || this.config.api;
-      let payload =
-        message.payload || JSON.parse(`${this.config.payload}`) || '';
-      let version = message.version || this.config.version;
-      let method = message.method || this.config.method;
-      let path = message.path || this.config.path;
+      const apiGoogle = message.api || this.config.api;
+      const payload =
+        message.payload || JSON.parse(`${this.config.payload}`) || "";
+      const version = message.version || this.config.version;
+      const method = message.method || this.config.method;
+      const path = message.path || this.config.path;
 
       try {
-        let request = payload;
+        const request = payload;
         const api = (google as any)[apiGoogle]({
           version: version,
           auth: conn,
@@ -49,12 +49,12 @@ export default class GoogleService {
         const result = await api[path][method](request);
         this.sendMsg(null, result);
       } catch (err) {
-        this.sendMsg(err, null);
+        this.sendMsg(err as Error, null);
       }
     });
   }
 
-  sendMsg(err: any, result: any): void {
+  sendMsg(err: Error | null, result: Record<string, unknown> | null): void {
     if (err) {
       this.node.error(err.message, this.msg);
       NodeUtils.error(this.node, err.message);

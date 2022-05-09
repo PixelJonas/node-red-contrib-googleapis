@@ -1,5 +1,5 @@
-import { NodeMessageInFlow } from 'node-red';
-import { GoogleCredentialsNode } from '../../shared/types';
+import { NodeMessageInFlow } from "node-red";
+import { GoogleCredentialsNode } from "../../shared/types";
 
 export interface GoogleOperationOptions {
   api: string;

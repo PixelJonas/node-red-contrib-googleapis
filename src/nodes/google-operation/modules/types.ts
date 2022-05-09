@@ -1,6 +1,6 @@
-import { Node, NodeDef } from 'node-red';
-import { GoogleCredentialsNode } from 'src/nodes/shared/types';
-import { GoogleOperationOptions } from '../shared/types';
+import { Node, NodeDef } from "node-red";
+import { GoogleCredentialsNode } from "src/nodes/shared/types";
+import { GoogleOperationOptions } from "../shared/types";
 
 export interface GoogleOperationNodeDef
   extends NodeDef,
@@ -11,5 +11,5 @@ export interface GoogleOperationNodeDef
 export interface GoogleOperationNode extends Node {
   google: string;
   googleConfig: GoogleCredentialsNode;
-  sendMsg: (err: any, result: object | null) => void;
+  sendMsg: (err: any, result: Record<string, unknown> | null) => void;
 }
