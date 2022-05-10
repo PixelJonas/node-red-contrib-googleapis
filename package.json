@@ -1,6 +1,6 @@
 {
   "name": "@openpixel/node-red-contrib-googleapis",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Adds nodes to work with the google calendars API",
   "scripts": {
     "add-node": "node ./utils/add-node.js",
