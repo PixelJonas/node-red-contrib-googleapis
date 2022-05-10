@@ -21,7 +21,8 @@
   "node-red": {
     "nodes": {
       "google-credentials": "./dist/nodes/google-credentials/google-credentials.js",
-      "google-operation": "./dist/nodes/google-operation/google-operation.js"
+      "google-operation": "./dist/nodes/google-operation/google-operation.js",
+      "google-events": "./dist/nodes/google-events/google-events.js"
     }
   },
   "dependencies": {

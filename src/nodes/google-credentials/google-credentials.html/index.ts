@@ -1,8 +1,5 @@
 import { EditorRED } from "node-red";
-import {
-  GoogleCredentialsEditorNodeProperties,
-  GoogleCredentialsOptions,
-} from "./modules/types";
+import { GoogleCredentialsEditorNodeProperties, GoogleCredentialsOptions } from "../shared/types";
 
 declare const RED: EditorRED;
 declare global {

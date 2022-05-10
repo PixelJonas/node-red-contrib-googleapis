@@ -1,1 +1,1 @@
-export {};
+import { EditorNodeProperties } from 'node-red'
