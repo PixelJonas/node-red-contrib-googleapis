@@ -25,9 +25,9 @@ export default class GoogleService {
     this.config = config;
   }
 
-  login(msg: NodeMessageInFlow, callback?: GoogleCallback): void {
-    this.googleCredentials.login(msg, async (err: any, conn: any) => {
-      const message = (msg as unknown) as GoogleOperationMessage;
+  login(callback?: GoogleCallback): void {
+    this.googleCredentials.login(this.msg, async (err: any, conn: any) => {
+      const message = (this.msg as unknown) as GoogleOperationMessage;
       if (err) {
         console.log(err);
         return this.sendMsg(err, null);
@@ -52,7 +52,7 @@ export default class GoogleService {
       const version = message.version || this.config.version;
       const method = message.method || this.config.method;
       const path = message.path || this.config.path;
-
+      console.log(payload);
       try {
         const request = payload;
         const api = (google as any)[apiGoogle]({

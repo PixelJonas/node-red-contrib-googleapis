@@ -20,7 +20,6 @@ const nodeInit: NodeInitializer = (RED): void => {
     if (this.googleConfig) {
       this.on('input', (msg, _send, _done) => {
         NodeUtils.info(this, 'processing');
-        console.log(config);
         const payload = msg.payload as GoogleEventsOptions;
         const gServiceConfig: GoogleOperationOptions = {
           ...config,
@@ -39,14 +38,13 @@ const nodeInit: NodeInitializer = (RED): void => {
             },
           },
         };
-
         const gService = new GoogleService(
           this.googleConfig,
           this,
-          msg,
+          { _msgid: msg._msgid },
           gServiceConfig
         );
-        gService.login(msg, (result) => {
+        gService.login((result) => {
           gService.sendMsg(null, result.data.items);
         });
       });

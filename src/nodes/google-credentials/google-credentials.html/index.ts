@@ -46,9 +46,7 @@ RED.nodes.registerType<
     $("#node-config-google-tooltip").html(
       `<p>Please configure the authorized <b>Redirect URIs</b> of your app to include the following url:</p>\n<code>${callback}</code>`
     );
-    console.log(`yep this works1`);
     const updateAuthButton = () => {
-      console.log("Hi");
       const clientId = $("#node-config-input-clientId").val() || "";
       const clientSecret = $("#node-config-input-clientSecret").val();
       const username = $("#node-config-input-username").val();
@@ -81,7 +79,6 @@ RED.nodes.registerType<
 
     //
     function pollGoogleCredentialsUrl() {
-      console.log(`yep this works2`);
 
       $.getJSON(pathname + "google/credentials/" + id, (data) => {
         if (data.userId) {
@@ -97,7 +94,6 @@ RED.nodes.registerType<
     }
 
     function updateGoogleUserId(dn: string) {
-      console.log(`yep this works3`);
 
       $("#node-config-google-client-keys").hide();
       $("#node-config-google").show();
@@ -114,7 +110,6 @@ RED.nodes.registerType<
     }
 
     $("#node-config-start-auth").on("mousedown", function () {
-      console.log(`yep this works4`);
 
       const clientId = $("#node-config-input-clientId").val();
       const clientSecret = $("#node-config-input-clientSecret").val();
@@ -143,7 +138,6 @@ RED.nodes.registerType<
     });
 
     $("#node-config-start-auth").on("click", (e) => {
-      console.log(`yep this works5`);
 
       const clientId = $("#node-config-input-clientId").val();
       const clientSecret = $("#node-config-input-clientSecret").val();
@@ -158,10 +152,8 @@ RED.nodes.registerType<
         e.preventDefault();
       }
     });
-    console.log(`yep this works7`);
 
     $("#node-config-input-loginType").on("change", () => {
-      console.log(`yep this works6`);
 
       const apiKeyel = $(".input-apiKey-row");
       const clientIdel = $(".input-clientId-row");
