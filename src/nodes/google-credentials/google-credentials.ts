@@ -1,18 +1,24 @@
-import { google } from 'googleapis';
-import { NodeInitializer } from 'node-red';
-import { v4 as uuidv4 } from 'uuid';
-import { GoogleCredentialsNode } from '../shared/types';
+import { google } from "googleapis";
+import { NodeInitializer } from "node-red";
+import { v4 as uuidv4 } from "uuid";
+import {
+  GoogleCredentialsNode,
+  GoogleCredentialsNodeDef,
+} from "../shared/types";
 import {
   GoogleCredentialsEditorNodeProperties,
   GoogleCredentialsOptions,
-} from './shared/types';
+} from "./shared/types";
 
 const nodeInit: NodeInitializer = (RED): void => {
-  function GoogleCredentialsNodeConstructor(this: any, config: any): void {
+  function GoogleCredentialsNodeConstructor(
+    this: any,
+    config: GoogleCredentialsNodeDef
+  ): void {
     const node = <GoogleCredentialsNode>this;
 
     RED.nodes.createNode(node, config);
-    if (config.loginType == 'oauth') {
+    if (config.loginType == "oauth") {
     }
     const credentials = <GoogleCredentialsOptions>(
       RED.nodes.getCredentials(node.id)
@@ -25,9 +31,9 @@ const nodeInit: NodeInitializer = (RED): void => {
     node.login = (_msg: string, callback: any) => {
       if (node.conn) {
         return callback(null, node.conn);
-      } else if (credentials.loginType === 'oauth') {
+      } else if (credentials.loginType === "oauth") {
         if (!credentials.accessToken || !credentials.refreshToken) {
-          const error = new Error('accessToken or refreshToken missing');
+          const error = new Error("accessToken or refreshToken missing");
           return callback(error);
         }
 
@@ -39,10 +45,10 @@ const nodeInit: NodeInitializer = (RED): void => {
         conn.setCredentials({
           refresh_token: credentials.refreshToken,
         });
-        conn.on('tokens', (tokens) => {
-          console.log('oauthRefresh');
+        conn.on("tokens", (tokens) => {
+          console.log("oauthRefresh");
           if (tokens.refresh_token) {
-            console.log('refreshToken:' + tokens.refresh_token);
+            console.log("refreshToken:" + tokens.refresh_token);
             credentials.refreshToken = tokens.refresh_token;
           }
           console.log(`accessToken: ${tokens.access_token}`);
@@ -56,25 +62,25 @@ const nodeInit: NodeInitializer = (RED): void => {
   }
 
   RED.nodes.registerType(
-    'google-credentials',
+    "google-credentials",
     GoogleCredentialsNodeConstructor,
     {
       credentials: {
-        id: { type: 'text' },
-        loginType: { type: 'text' },
-        username: { type: 'text' },
-        apiKey: { type: 'password' },
-        clientId: { type: 'password' },
-        clientSecret: { type: 'password' },
-        scopes: { type: 'text' },
-        accessToken: { type: 'password' },
-        refreshToken: { type: 'password' },
-        userId: { type: 'text' },
+        id: { type: "text" },
+        loginType: { type: "text" },
+        username: { type: "text" },
+        apiKey: { type: "password" },
+        clientId: { type: "password" },
+        clientSecret: { type: "password" },
+        scopes: { type: "text" },
+        accessToken: { type: "password" },
+        refreshToken: { type: "password" },
+        userId: { type: "text" },
       },
     }
   );
 
-  RED.httpAdmin.get('/google/credentials/:id', (req, res) => {
+  RED.httpAdmin.get("/google/credentials/:id", (req, res) => {
     const id = req.params.id;
     const credentials = <GoogleCredentialsOptions>RED.nodes.getCredentials(id);
     return res.json({
@@ -82,17 +88,17 @@ const nodeInit: NodeInitializer = (RED): void => {
     });
   });
 
-  RED.httpAdmin.post('/google/credentials/:id/reset', (req, res) => {
+  RED.httpAdmin.post("/google/credentials/:id/reset", (req, res) => {
     const id = req.params.id;
     const credentials = <GoogleCredentialsOptions>RED.nodes.getCredentials(id);
-    credentials.userId = '';
+    credentials.userId = "";
     RED.nodes.addCredentials(id, credentials);
     return res.json({
       userId: credentials.userId,
     });
   });
 
-  RED.httpAdmin.get('/google/credentials/:id/auth', (req, res) => {
+  RED.httpAdmin.get("/google/credentials/:id/auth", (req, res) => {
     const id = req.query.id;
     const googleConfig = (RED.nodes.getNode(
       `${id}`
@@ -129,7 +135,7 @@ const nodeInit: NodeInitializer = (RED): void => {
 
     const credentials = {
       id: id,
-      loginType: 'oauth',
+      loginType: "oauth",
       clientId: clientId,
       clientSecret: clientSecret,
       scopes: `${scopes}`,
@@ -145,18 +151,18 @@ const nodeInit: NodeInitializer = (RED): void => {
     );
 
     let authUrl = oauth2.generateAuthUrl({
-      access_type: 'offline',
-      prompt: 'consent',
-      scope: scopes.split(','),
+      access_type: "offline",
+      prompt: "consent",
+      scope: scopes.split(","),
     });
     if (req.query.username)
-      authUrl = authUrl + '&login_hint=' + req.query.username;
+      authUrl = authUrl + "&login_hint=" + req.query.username;
 
     return res.redirect(authUrl);
   });
 
   RED.httpAdmin.get(
-    '/google/credentials/:id/auth/callback',
+    "/google/credentials/:id/auth/callback",
     async (req, res) => {
       const id = req.params.id;
       const credentials = <GoogleCredentialsOptions>(
@@ -164,11 +170,11 @@ const nodeInit: NodeInitializer = (RED): void => {
       );
 
       if (!req.query.code) {
-        return res.send('ERROR: missing authorization code');
+        return res.send("ERROR: missing authorization code");
       }
 
       if (!credentials || !credentials.clientId || !credentials.clientSecret) {
-        return res.send('ERROR: missing credentials');
+        return res.send("ERROR: missing credentials");
       }
 
       const conn = new google.auth.OAuth2(
@@ -184,7 +190,7 @@ const nodeInit: NodeInitializer = (RED): void => {
 
       const finalCredentials = {
         id: id,
-        loginType: 'oauth',
+        loginType: "oauth",
         clientId: credentials.clientId,
         clientSecret: credentials.clientSecret,
         scopes: credentials.scopes,
@@ -198,7 +204,7 @@ const nodeInit: NodeInitializer = (RED): void => {
 
       return res.json({
         message:
-          'Authorised. You can now close this window and go back to Node-RED.',
+          "Authorised. You can now close this window and go back to Node-RED.",
         credentials: RED.nodes.getCredentials(id),
       });
     }

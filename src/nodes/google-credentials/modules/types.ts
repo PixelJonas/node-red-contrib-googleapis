@@ -1,1 +1,0 @@
-import { EditorNodeProperties } from 'node-red'

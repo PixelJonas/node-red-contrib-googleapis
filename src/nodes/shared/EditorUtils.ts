@@ -1,12 +1,11 @@
-import { EditorWidgetTypedInputType } from 'node-red';
-import { Input } from './types';
-
+import { EditorWidgetTypedInputType } from "node-red";
+import { Input } from "./types";
 
 const defaultTypes: Array<EditorWidgetTypedInputType> = [
-  'str',
-  'msg',
-  'flow',
-  'global',
+  "str",
+  "msg",
+  "flow",
+  "global",
 ];
 
 export default class EditorUtils {

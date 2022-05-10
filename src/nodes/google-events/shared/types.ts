@@ -1,4 +1,4 @@
-import { GoogleCredentialsNode } from 'src/nodes/shared/types';
+import { GoogleCredentialsNode } from "../../shared/types";
 
 export interface GoogleEventsOptions {
   calendarId: string;

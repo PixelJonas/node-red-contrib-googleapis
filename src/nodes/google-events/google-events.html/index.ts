@@ -23,8 +23,8 @@ const TypeConfig: Array<Input> = [
 ];
 
 RED.nodes.registerType<GoogleEventsEditorNodeProperties>('google-events', {
-  category: 'function',
-  color: '#a6bbcf',
+  category: 'google',
+  color: '#fff',
   defaults: {
     name: { value: '' },
     calendarId: { value: 'primary', required: true },

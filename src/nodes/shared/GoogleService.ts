@@ -5,7 +5,7 @@ import {
   GoogleOperationOptions,
 } from "../google-operation/shared/types";
 import NodeUtils from "./NodeUtils";
-import { GoogleCredentialsNode } from "./types";
+import { GoogleCallback, GoogleCredentialsNode } from "./types";
 
 export default class GoogleService {
   googleCredentials: GoogleCredentialsNode;
@@ -25,7 +25,7 @@ export default class GoogleService {
     this.config = config;
   }
 
-  login(msg: NodeMessageInFlow): void {
+  login(msg: NodeMessageInFlow, callback?: GoogleCallback): void {
     this.googleCredentials.login(msg, async (err: any, conn: any) => {
       const message = (msg as unknown) as GoogleOperationMessage;
       if (err) {
@@ -33,9 +33,18 @@ export default class GoogleService {
         return this.sendMsg(err, null);
       }
 
+      let configPayload: unknown = {};
+      if (
+        typeof this.config.payload === "string" ||
+        this.config.payload instanceof String
+      ) {
+        configPayload = JSON.parse(`${this.config.payload}`);
+      } else {
+        configPayload = this.config.payload || {};
+      }
+
       const apiGoogle = message.api || this.config.api;
-      const payload =
-        message.payload || JSON.parse(`${this.config.payload}`) || "";
+      const payload = message.payload || configPayload || "";
       const version = message.version || this.config.version;
       const method = message.method || this.config.method;
       const path = message.path || this.config.path;
@@ -47,9 +56,10 @@ export default class GoogleService {
           auth: conn,
         });
         const result = await api[path][method](request);
-        this.sendMsg(null, result);
+        callback ? callback(result) : this.sendMsg(null, result);
       } catch (err) {
         this.sendMsg(err as Error, null);
+        return null;
       }
     });
   }

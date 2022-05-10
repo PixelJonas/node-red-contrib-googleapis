@@ -1,13 +1,13 @@
-import { GoogleAuth, OAuth2Client } from 'google-auth-library';
-import { JSONClient } from 'google-auth-library/build/src/auth/googleauth';
+import { GoogleAuth, OAuth2Client } from "google-auth-library";
+import { JSONClient } from "google-auth-library/build/src/auth/googleauth";
 import {
   EditorWidgetTypedInputTypeDefinition,
   EditorWidgetTypedInputType,
   Node,
   NodeDef,
   EditorWidgetTypedInputOptions,
-} from 'node-red';
-import { GoogleCredentialsOptions } from '../google-credentials/shared/types';
+} from "node-red";
+import { GoogleCredentialsOptions } from "../google-credentials/shared/types";
 
 export interface GoogleCredentialsNodeDef
   extends NodeDef,
@@ -19,9 +19,18 @@ export interface GoogleCredentialsNode extends Node {
   login: any;
 }
 
-export interface Input extends Omit<EditorWidgetTypedInputOptions, 'types'> {
+export interface Input extends Omit<EditorWidgetTypedInputOptions, "types"> {
   id: string;
   types?: Array<
     EditorWidgetTypedInputType | EditorWidgetTypedInputTypeDefinition
   >;
+}
+
+export interface GoogleNode extends Node {
+  google: string;
+  googleConfig: GoogleCredentialsNode;
+}
+
+export interface GoogleCallback {
+  (result: any): void;
 }
