@@ -3,11 +3,11 @@ import { NodeInitializer } from "node-red";
 import { v4 as uuidv4 } from "uuid";
 import {
   GoogleCredentialsNode,
-  GoogleCredentialsNodeDef,
+  GoogleCredentialsNodeDef
 } from "../shared/types";
 import {
   GoogleCredentialsEditorNodeProperties,
-  GoogleCredentialsOptions,
+  GoogleCredentialsOptions
 } from "./shared/types";
 
 const nodeInit: NodeInitializer = (RED): void => {
@@ -18,7 +18,7 @@ const nodeInit: NodeInitializer = (RED): void => {
     const node = <GoogleCredentialsNode>this;
 
     RED.nodes.createNode(node, config);
-    if (config.loginType == "oauth") {
+    if (config.loginType == "oauth-consent") {
     }
     const credentials = <GoogleCredentialsOptions>(
       RED.nodes.getCredentials(node.id)
@@ -31,7 +31,7 @@ const nodeInit: NodeInitializer = (RED): void => {
     node.login = (_msg: string, callback: any) => {
       if (node.conn) {
         return callback(null, node.conn);
-      } else if (credentials.loginType === "oauth") {
+      } else if (credentials.loginType === "oauth-consent" || credentials.loginType === "oauth-device-code") {
         if (!credentials.accessToken || !credentials.refreshToken) {
           const error = new Error("accessToken or refreshToken missing");
           return callback(error);
@@ -40,7 +40,7 @@ const nodeInit: NodeInitializer = (RED): void => {
         const conn = new google.auth.OAuth2(
           credentials.clientId,
           credentials.clientSecret,
-          credentials.redirectUri
+          credentials.loginType === "oauth-device-code" ? credentials.redirectUri : undefined
         );
         conn.setCredentials({
           refresh_token: credentials.refreshToken,

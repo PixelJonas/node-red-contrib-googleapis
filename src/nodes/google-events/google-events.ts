@@ -19,8 +19,9 @@ const nodeInit: NodeInitializer = (RED): void => {
 
     if (this.googleConfig) {
       this.on('input', (msg, _send, _done) => {
+        console.dir(this.googleConfig);
+        
         NodeUtils.info(this, 'processing');
-        console.log(config);
         const payload = msg.payload as GoogleEventsOptions;
         const gServiceConfig: GoogleOperationOptions = {
           ...config,

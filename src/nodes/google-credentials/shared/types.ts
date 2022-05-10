@@ -1,7 +1,7 @@
 import { EditorNodeProperties } from "node-red";
 
 export interface GoogleCredentialsOptions {
-  loginType: "oauth";
+  loginType: string;
   username?: string;
   credentials?: any;
   apiKey?: string;
