@@ -48,7 +48,10 @@ export default class GoogleService {
       }
 
       const apiGoogle = message.api || this.config.api;
-      const payload = message.payload || configPayload || '';
+      const payload = {
+        ...(this.config.payload as object),
+        ...(this.msg.payload as object),
+      };
       const version = message.version || this.config.version;
       const method = message.method || this.config.method;
       const path = message.path || this.config.path;
