@@ -79,7 +79,6 @@ RED.nodes.registerType<
 
     //
     function pollGoogleCredentialsUrl() {
-
       $.getJSON(pathname + "google/credentials/" + id, (data) => {
         if (data.userId) {
           updateGoogleUserId(data.userId);
@@ -94,7 +93,6 @@ RED.nodes.registerType<
     }
 
     function updateGoogleUserId(dn: string) {
-
       $("#node-config-google-client-keys").hide();
       $("#node-config-google").show();
       $("#node-config-input-userId").val(dn);
@@ -110,7 +108,6 @@ RED.nodes.registerType<
     }
 
     $("#node-config-start-auth").on("mousedown", function () {
-
       const clientId = $("#node-config-input-clientId").val();
       const clientSecret = $("#node-config-input-clientSecret").val();
       const username = $("#node-config-input-username").val();
@@ -138,7 +135,6 @@ RED.nodes.registerType<
     });
 
     $("#node-config-start-auth").on("click", (e) => {
-
       const clientId = $("#node-config-input-clientId").val();
       const clientSecret = $("#node-config-input-clientSecret").val();
       const username = $("#node-config-input-username").val();
@@ -154,7 +150,6 @@ RED.nodes.registerType<
     });
 
     $("#node-config-input-loginType").on("change", () => {
-
       const apiKeyel = $(".input-apiKey-row");
       const clientIdel = $(".input-clientId-row");
       const scopesel = $(".input-scopes-row");
