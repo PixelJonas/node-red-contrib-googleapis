@@ -46,7 +46,7 @@ const nodeInit: NodeInitializer = (RED): void => {
         conn.setCredentials({
           refresh_token: credentials.refreshToken,
         });
-        conn.on("tokens", (tokens) => {
+        conn.on("tokens", (tokens: any) => {
           if (tokens.refresh_token) {
             credentials.refreshToken = tokens.refresh_token;
           }
@@ -98,9 +98,9 @@ const nodeInit: NodeInitializer = (RED): void => {
 
   RED.httpAdmin.get("/google/credentials/:id/auth", (req, res) => {
     const id = req.query.id;
-    const googleConfig = (RED.nodes.getNode(
+    const googleConfig = RED.nodes.getNode(
       `${id}`
-    ) as unknown) as GoogleCredentialsEditorNodeProperties;
+    ) as unknown as GoogleCredentialsEditorNodeProperties;
     let clientId, clientSecret, scopes;
     if (
       googleConfig &&

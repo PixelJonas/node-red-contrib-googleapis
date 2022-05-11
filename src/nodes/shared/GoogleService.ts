@@ -27,7 +27,7 @@ export default class GoogleService {
 
   login(callback?: GoogleCallback): void {
     this.googleCredentials.login(this.msg, async (err: any, conn: any) => {
-      const message = (this.msg as unknown) as GoogleOperationMessage;
+      const message = this.msg as unknown as GoogleOperationMessage;
       if (err) {
         return this.sendMsg(err, null);
       }

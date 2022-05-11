@@ -83,7 +83,6 @@ RED.nodes.registerType<
     );
     updateAuthButton();
 
-    //
     function pollGoogleCredentialsUrl() {
       $.getJSON(pathname + "google/credentials/" + id, (data) => {
         if (data.userId) {
@@ -145,42 +144,43 @@ RED.nodes.registerType<
       clientSecret: string,
       deviceCode: string
     ) {
-      const params = new URLSearchParams();
+      const params = {
+        client_id: clientId,
+        client_secret: clientSecret,
+        deviceCode: deviceCode,
+        grant_type: "urn:ietf:params:oauth:grant-type:device_code",
+      };
 
-      params.append("client_id", clientId);
-      params.append("client_secret", clientSecret);
-      params.append("device_code", deviceCode);
-      params.append(
-        "grant_type",
-        "urn:ietf:params:oauth:grant-type:device_code"
-      );
+      $.post("https://oauth2.googleapis.com/token", params)
+        .then((response) => {
+          if (response["access_token"]) {
+            $("#node-config-input-accessToken").val(response["access_token"]);
+            $("#node-config-input-refreshToken").val(response["refresh_token"]);
 
-      fetch("https://oauth2.googleapis.com/token", {
-        method: "POST",
-        body: params,
-      }).then((res) => {
-        res.json().then((json) => {
-          if (json["access_token"]) {
-            $("#node-config-input-accessToken").val(json["access_token"]);
-            $("#node-config-input-refreshToken").val(json["refresh_token"]);
-
-            node.accessToken = json["access_token"];
-            node.refreshToken = json["refresh_token"];
-            node.credentials.accessToken = json["access_token"];
-            node.credentials.refreshToken = json["refresh_token"];
+            node.accessToken = response["access_token"];
+            node.refreshToken = response["refresh_token"];
+            node.credentials.accessToken = response["access_token"];
+            node.credentials.refreshToken = response["refresh_token"];
 
             $("#node-config-device-code-tooltip").html(
               `<p>Success!</p><p>Authentication flow done, click "Add" on the upper right corner to proceed.</p>`
             );
           } else {
+            console.log("no access token found");
             window.deviceCodeAuth = window.setTimeout(
               () =>
                 pollDeviceCodeAuthStatus(clientId, clientSecret, deviceCode),
               2000
             );
           }
+        })
+        .catch((error) => {
+          console.log(error);
+          window.deviceCodeAuth = window.setTimeout(
+            () => pollDeviceCodeAuthStatus(clientId, clientSecret, deviceCode),
+            2000
+          );
         });
-      });
     }
 
     $("#node-config-start-auth").on("click", (e) => {
@@ -209,16 +209,15 @@ RED.nodes.registerType<
           const params = new URLSearchParams();
           params.append("client_id", `${clientId}`);
           params.append("scope", `${scopes}`);
-
-          fetch("https://oauth2.googleapis.com/device/code", {
-            method: "POST",
-            body: params,
-          }).then((res) => {
-            res.json().then((json) => {
+          const tokenParams = {
+            client_id: `${clientId}`,
+            scope: `${scopes}`,
+          };
+          $.post("https://oauth2.googleapis.com/device/code", tokenParams).then(
+            (response) => {
               $("#node-config-device-code-tooltip").html(
-                `<p>Please click on this link:</p>\n<code>https://www.google.com/device</code><p>and put in this code:</p>\n<code>${json["user_code"]}</code>`
+                `<p>Please click on this link:</p>\n<code>https://www.google.com/device</code><p>and put in this code:</p>\n<code>${response["user_code"]}</code>`
               );
-
               $("#node-config-device-code-tooltip").show();
 
               window.deviceCodeAuth = window.setTimeout(
@@ -226,12 +225,12 @@ RED.nodes.registerType<
                   pollDeviceCodeAuthStatus(
                     `${clientId}`,
                     `${clientSecret}`,
-                    json["device_code"]
+                    response["device_code"]
                   ),
                 2000
               );
-            });
-          });
+            }
+          );
         }
       }
     });
