@@ -1,11 +1,11 @@
-import { google } from 'googleapis';
-import { Node, NodeMessageInFlow } from 'node-red';
+import { google } from "googleapis";
+import { Node, NodeMessageInFlow } from "node-red";
 import {
   GoogleOperationMessage,
   GoogleOperationOptions,
-} from '../google-operation/shared/types';
-import NodeUtils from './NodeUtils';
-import { GoogleCallback, GoogleCredentialsNode } from './types';
+} from "../google-operation/shared/types";
+import NodeUtils from "./NodeUtils";
+import { GoogleCallback, GoogleCredentialsNode } from "./types";
 
 export default class GoogleService {
   googleCredentials: GoogleCredentialsNode;
@@ -25,9 +25,9 @@ export default class GoogleService {
     this.config = config;
   }
 
-  login(msg: NodeMessageInFlow, callback?: GoogleCallback): void {
-    this.googleCredentials.login(msg, async (err: any, conn: any) => {
-      const message = (msg as unknown) as GoogleOperationMessage;
+  login(callback?: GoogleCallback): void {
+    this.googleCredentials.login(this.msg, async (err: any, conn: any) => {
+      const message = (this.msg as unknown) as GoogleOperationMessage;
       if (err) {
         console.log(err);
         return this.sendMsg(err, null);
@@ -35,7 +35,7 @@ export default class GoogleService {
 
       let configPayload: unknown = {};
       if (
-        typeof this.config.payload === 'string' ||
+        typeof this.config.payload === "string" ||
         this.config.payload instanceof String
       ) {
         if (this.config.payload.length === 0) {
@@ -48,11 +48,14 @@ export default class GoogleService {
       }
 
       const apiGoogle = message.api || this.config.api;
-      const payload = message.payload || configPayload || '';
+      const payload = {
+        ...(configPayload as Record<string, unknown>),
+        ...(this.msg.payload as Record<string, unknown>),
+      };
       const version = message.version || this.config.version;
       const method = message.method || this.config.method;
       const path = message.path || this.config.path;
-
+      console.log(payload);
       try {
         const request = payload;
         const api = (google as any)[apiGoogle]({
