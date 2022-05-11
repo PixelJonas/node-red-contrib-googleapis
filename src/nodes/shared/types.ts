@@ -34,3 +34,8 @@ export interface GoogleNode extends Node {
 export interface GoogleCallback {
   (result: any): void;
 }
+
+export interface CustomEditorWidgetTypedInputTypeDefinition
+  extends EditorWidgetTypedInputTypeDefinition {
+  options?: any;
+}

@@ -28,7 +28,7 @@ const nodeInit: NodeInitializer = (RED): void => {
           msg,
           config
         );
-        gService.login();
+        gService.get();
       });
     } else {
       const error = new Error("missing google configuration");

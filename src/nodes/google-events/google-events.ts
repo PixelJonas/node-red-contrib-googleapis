@@ -44,7 +44,7 @@ const nodeInit: NodeInitializer = (RED): void => {
           { _msgid: msg._msgid },
           gServiceConfig
         );
-        gService.login((result) => {
+        gService.get((result) => {
           gService.sendMsg(null, result.data.items);
         });
       });
