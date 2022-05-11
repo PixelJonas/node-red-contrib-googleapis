@@ -54,8 +54,8 @@ RED.nodes.registerType<
     console.log(`yep this works1`);
     const updateAuthButton = () => {
       console.log("Hi");
-      const clientId = $("#node-config-input-client-id").val() || "";
-      const clientSecret = $("#node-config-input-client-secret").val();
+      const clientId = $("#node-config-input-clientId").val() || "";
+      const clientSecret = $("#node-config-input-clientSecret").val();
       const username = $("#node-config-input-username").val();
       const scopes = $("#node-config-input-scopes").val();
       $("#node-config-start-auth").toggleClass(
@@ -70,11 +70,11 @@ RED.nodes.registerType<
       "change keydown paste input",
       updateAuthButton
     );
-    $("#node-config-input-client-id").on(
+    $("#node-config-input-clientId").on(
       "change keydown paste input",
       updateAuthButton
     );
-    $("#node-config-input-client-secret").on(
+    $("#node-config-input-clientSecret").on(
       "change keydown paste input",
       updateAuthButton
     );
@@ -106,7 +106,7 @@ RED.nodes.registerType<
 
       $("#node-config-google-client-keys").hide();
       $("#node-config-google").show();
-      $("#node-config-input-user-id").val(dn);
+      $("#node-config-input-userId").val(dn);
       const username = $("#node-config-input-username").val() || "";
       $("#node-config-google-username").html(`${username}`);
     }
@@ -121,10 +121,10 @@ RED.nodes.registerType<
     $("#node-config-start-auth").on("mousedown", function () {
       console.log(`yep this works4`);
 
-      const loginType = $("#node-config-input-login-type option:selected").val();
+      const loginType = $("#node-config-input-loginType option:selected").val();
       if (loginType == "oauth-consent") {
-        const clientId = $("#node-config-input-client-id").val();
-        const clientSecret = $("#node-config-input-client-secret").val();
+        const clientId = $("#node-config-input-clientId").val();
+        const clientSecret = $("#node-config-input-clientSecret").val();
         const username = $("#node-config-input-username").val();
         const scopes = $("#node-config-input-scopes").val();
         const url =
@@ -164,8 +164,8 @@ RED.nodes.registerType<
         res.json().then((json) => {
           
           if (json["access_token"]) {
-          $("#node-config-input-access-token").val(json["access_token"]);
-            $("#node-config-input-refresh-token").val(json["refresh_token"]);
+          $("#node-config-input-accessToken").val(json["access_token"]);
+            $("#node-config-input-refreshToken").val(json["refresh_token"]);
 
             node.accessToken = json["access_token"];
             node.refreshToken = json["refresh_token"];
@@ -193,11 +193,11 @@ RED.nodes.registerType<
       delete window.deviceCodeAuth;
 
       const username = $("#node-config-input-username").val();
-      const clientId = $("#node-config-input-client-id").val();
-      const clientSecret = $("#node-config-input-client-secret").val();
+      const clientId = $("#node-config-input-clientId").val();
+      const clientSecret = $("#node-config-input-clientSecret").val();
       const scopes = $("#node-config-input-scopes").val();
 
-      const loginType = $("#node-config-input-login-type option:selected").val();
+      const loginType = $("#node-config-input-loginType option:selected").val();
       if (loginType == "oauth-consent") {
         if (
           clientId === "" ||
@@ -219,6 +219,7 @@ RED.nodes.registerType<
 
           fetch("https://oauth2.googleapis.com/device/code", {method: "POST", body: params}).then((res) => {
             res.json().then((json) => {
+              console.log(json);
               $("#node-config-device-code-tooltip").html(
                 `<p>Please click on this link:</p>\n<code>https://www.google.com/device</code><p>and put in this code:</p>\n<code>${json["user_code"]}</code>`
               );
@@ -236,18 +237,18 @@ RED.nodes.registerType<
     });
     console.log(`yep this works7`);
 
-    $("#node-config-input-login-type").on("change", () => {
+    $("#node-config-input-loginType").on("change", () => {
       console.log(`yep this works6`);
 
       const consentTooltipel = $("#node-config-google-tooltip");
       const deviceCodeTooltipel = $("#node-config-device-code-tooltip");
       const apiKeyel = $(".input-apiKey-row");
-      const clientIdel = $(".input-client-id-row");
+      const clientIdel = $(".input-clientId-row");
       const scopesel = $(".input-scopes-row");
-      const secretel = $(".input-client-secret-row");
+      const secretel = $(".input-clientSecret-row");
       const buttonel = $(".input-startauth-row");
 
-      const loginType = $("#node-config-input-login-type option:selected").val();
+      const loginType = $("#node-config-input-loginType option:selected").val();
       if (loginType == "oauth-consent") {
         delete window.deviceCodeAuth;
         consentTooltipel.show();
