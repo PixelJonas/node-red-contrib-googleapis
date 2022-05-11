@@ -18,12 +18,9 @@ const nodeInit: NodeInitializer = (RED): void => {
     const node = <GoogleCredentialsNode>this;
 
     RED.nodes.createNode(node, config);
-    if (config.loginType == "oauth-consent") {
-    }
     const credentials = <GoogleCredentialsOptions>(
       RED.nodes.getCredentials(node.id)
     );
-    console.log(credentials);
 
     // Save connection to Node
     node.conn = null;
@@ -36,7 +33,6 @@ const nodeInit: NodeInitializer = (RED): void => {
           const error = new Error("accessToken or refreshToken missing");
           return callback(error);
         }
-
         const conn = new google.auth.OAuth2(
           credentials.clientId,
           credentials.clientSecret,
@@ -45,13 +41,10 @@ const nodeInit: NodeInitializer = (RED): void => {
         conn.setCredentials({
           refresh_token: credentials.refreshToken,
         });
-        conn.on("tokens", (tokens) => {
-          console.log("oauthRefresh");
+        conn.on('tokens', (tokens) => {
           if (tokens.refresh_token) {
-            console.log("refreshToken:" + tokens.refresh_token);
             credentials.refreshToken = tokens.refresh_token;
           }
-          console.log(`accessToken: ${tokens.access_token}`);
           credentials.accessToken = tokens.access_token;
           RED.nodes.addCredentials(node.id, credentials);
         });
@@ -103,7 +96,6 @@ const nodeInit: NodeInitializer = (RED): void => {
     const googleConfig = (RED.nodes.getNode(
       `${id}`
     ) as unknown) as GoogleCredentialsEditorNodeProperties;
-
     let clientId, clientSecret, scopes;
     if (
       googleConfig &&
@@ -141,7 +133,6 @@ const nodeInit: NodeInitializer = (RED): void => {
       scopes: `${scopes}`,
       redirectUri: req.query.callback,
     };
-
     RED.nodes.addCredentials(`${id}`, credentials);
 
     const oauth2 = new google.auth.OAuth2(
@@ -156,7 +147,7 @@ const nodeInit: NodeInitializer = (RED): void => {
       scope: scopes.split(","),
     });
     if (req.query.username)
-      authUrl = authUrl + "&login_hint=" + req.query.username;
+      authUrl = authUrl + '&login_hint=' + req.query.username;
 
     return res.redirect(authUrl);
   });
@@ -174,7 +165,7 @@ const nodeInit: NodeInitializer = (RED): void => {
       }
 
       if (!credentials || !credentials.clientId || !credentials.clientSecret) {
-        return res.send("ERROR: missing credentials");
+        return res.send('ERROR: missing credentials');
       }
 
       const conn = new google.auth.OAuth2(
@@ -184,13 +175,12 @@ const nodeInit: NodeInitializer = (RED): void => {
       );
 
       const { tokens } = await conn.getToken(`${req.query.code}`);
-      console.log(tokens);
 
       conn.setCredentials(tokens);
 
       const finalCredentials = {
         id: id,
-        loginType: "oauth",
+        loginType: 'oauth',
         clientId: credentials.clientId,
         clientSecret: credentials.clientSecret,
         scopes: credentials.scopes,

@@ -26,6 +26,7 @@ RED.nodes.registerType<
     loginType: { type: 'text' },
     apiKey: { type: 'password' },
     clientId: { type: 'password' },
+    clientSecret: { type: 'password' },
     scopes: { type: 'text' },
     userId: { type: 'text' },
     accessToken: { type: 'text' },
@@ -35,7 +36,7 @@ RED.nodes.registerType<
     return this.username || this.name || 'google credentials';
   },
   oneditprepare: function () {
-    let node = this as GoogleCredentialsOptions;
+    const node = this as GoogleCredentialsOptions;
 
     const id = this.id;
     let pathname = document.location.pathname;
@@ -214,7 +215,6 @@ RED.nodes.registerType<
             body: params,
           }).then((res) => {
             res.json().then((json) => {
-              console.log(json);
               $('#node-config-device-code-tooltip').html(
                 `<p>Please click on this link:</p>\n<code>https://www.google.com/device</code><p>and put in this code:</p>\n<code>${json['user_code']}</code>`
               );
