@@ -3,7 +3,8 @@
   "version": "0.2.12",
   "description": "Adds nodes to work with the google calendars API",
   "keywords": [
-    "nodered"
+    "nodered",
+    "node-red"
   ],
   "scripts": {
     "add-node": "node ./utils/add-node.js",
