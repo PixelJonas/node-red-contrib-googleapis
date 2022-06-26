@@ -2,6 +2,9 @@
   "name": "@openpixel/node-red-contrib-googleapis",
   "version": "0.2.11",
   "description": "Adds nodes to work with the google calendars API",
+  "keywords": [
+    "nodered"
+  ],
   "scripts": {
     "add-node": "node ./utils/add-node.js",
     "copy": "copyfiles -u 2 \"./src/nodes/**/*.{png,svg}\" \"./dist/nodes/\"",
