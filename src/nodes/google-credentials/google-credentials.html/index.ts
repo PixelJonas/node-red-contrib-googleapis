@@ -1,5 +1,5 @@
 import { EditorRED } from "node-red";
-import { CustomEditorWidgetTypedInputTypeDefinition } from "src/nodes/shared/types";
+import { CustomEditorWidgetTypedInputTypeDefinition } from "../../../../src/nodes/shared/types";
 import {
   GoogleCredentialsEditorNodeProperties,
   GoogleCredentialsOptions,
