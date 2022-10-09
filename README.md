@@ -1,48 +1,45 @@
-# Node-RED Node TypeScript Starter
+# Node-RED Node Google APIS
 
-This is a quick-start template repository for creating new Node-RED node sets in TypeScript.
+This is the repo of [@openpixel/node-red-contrib-googleapis](https://www.npmjs.com/package/@openpixel/node-red-contrib-googleapis)
 
-## Project Structure
-
-```
-node-red-node-typescript-starter/
- ├──src/                             * source files of the node set
- │   ├──__tests__/                   * tests for the node set (test file names should match *.test.ts glob pattern)
- │   │   └──transform-text.test.ts   * tests for the transform-text node
- │   │
- │   └──nodes/                       * node set folder, where subfolder names = node types
- │       ├──shared/                  * folder for .ts files shared across multiple nodes in the node set
- │       │
- │       └──transform-text/          * source files of the transform-text node
- │           ├──icons/               * custom icons used by the node set in the editor
- │           │
- │           ├──modules/             * .ts modules for the runtime side (transform-text.js file) of the node
- │           │
- │           ├──shared/              * folder for .ts files shared between the runtime side (.js file) and the editor side (.html file) of the node
- │           │
- │           ├──transform-text.html/ * files for compiling and bundling into the editor side (transform-text.html file) of the node
- │           │   ├──modules/         * .ts modules
- │           │   ├──editor.html      * html template for the edit dialog
- │           │   ├──help.html        * html template for the help in the info tab
- │           │   └──index.ts         * entry file
- │           │
- |           └──transform-text.ts    * entry file for the runtime side (transform-text.js file) of the node
- |
- ├──package.json                     * dependencies and node types for the Node-RED runtime to load
- |
- ├──rollup.config.editor.json        * rollup config for building the editor side of the nodes
- |
- ├──tsconfig.json                    * base typescript config, for the code editor
- ├──tsconfig.runtime.json            * config for creating a production build of the runtime side of the nodes
- └──tsconfig.runtime.watch.json      * config for watching and incremental building the runtime side of the nodes
-```
+I personally use that project to get all my google calendar events and parse them through node-red. While it may also work for other operations against the google API. These are not tested.
+The main concept is, to wrap a node-red node around [googleapis](https://www.npmjs.com/package/googleapis).
 
 ## Getting Started
 
-1. Generate a new GitHub repository by clicking the `Use this template` button at the top of the repository homepage, then clone your new repo. Or you might just clone this repo: `git clone https://github.com/alexk111/node-red-node-typescript-starter.git` and cd into it: `cd node-red-node-typescript-starter`.
-2. This project is designed to work with `yarn`. If you don't have `yarn` installed, you can install it with `npm install -g yarn`.
-3. Install dependencies: `yarn install`.
+1. This project is designed to work with `yarn`. If you don't have `yarn` installed, you can install it with `npm install -g yarn`.
+2. Install dependencies: `yarn install`.
 
+## Nodes
+
+This projects provides 1 credentials node `google-credentials` and two nodes `google-operation` and `google-events` 
+
+
+### Google Credentials
+The `google-credentials` node provides the Credentials to be used when performing request against the google-api. We opted to use [User consenst](https://support.google.com/googleapi/answer/6158849?hl=en&ref_topic=7013279#zippy=%2Cuser-consent) and the [limited Input Device](https://developers.google.com/identity/protocols/oauth2/limited-input-device) to provide credentials for node-red. While other authentication options would be supported as well they are currently not implemented. Using the [limited Input Device](https://developers.google.com/identity/protocols/oauth2/limited-input-device) there might be issues with specific scopes not being able to be accessed via this node. Please raise an issue if you find these scopes.
+
+#### Scopes
+When configuring the authentication you have to provide the scopes you want to use in a comma-seperated string. An overview of all available scopes is available at the [official documentation](https://developers.google.com/identity/protocols/oauth2/scopes).
+
+### Google Operation
+
+This node let's you perform a generic operation agains the google-api. Finding the correct combination of  `api`, `version`,`path`, `method` can get tricky. The [NodeJS API client documentation](https://googleapis.dev/nodejs/googleapis/latest/) will give you a hint on how to traverse the API and what payload is available for that API. 
+As an example, getting all events from your primary google calendar would be [/calendar/v3/events/list](https://googleapis.dev/nodejs/googleapis/latest/calendar/classes/Resource$Events.html#list) which results in
+
+```yaml
+name: myrequest
+api: calendar
+version: v3
+path: events
+method: list
+```
+
+It's also possible that your `path` includes a `/` to traverse the API.
+
+### Google Events
+This node directly calls the `calendar/v3/events/list` API to get all events from a calendar. It wraps the logic of `google-operation` to provide easier configuration of the payload (like what events, and what calendar).
+
+# Contributing
 ## Adding Nodes
 
 You can quickly scaffold a new node and add it to the node set. Use the following command to create `my-new-node-type` node:
@@ -88,26 +85,9 @@ Create a production build:
 ```
 yarn build
 ```
-
-## Backers 💝
-
-[[Become a backer](https://mynode.alexkaul.com/gh-donate)]
-
-[![Backer](https://mynode.alexkaul.com/gh-backer/top/0/avatar/60)](https://mynode.alexkaul.com/gh-backer/top/0/profile)
-[![Backer](https://mynode.alexkaul.com/gh-backer/top/1/avatar/60)](https://mynode.alexkaul.com/gh-backer/top/1/profile)
-[![Backer](https://mynode.alexkaul.com/gh-backer/top/2/avatar/60)](https://mynode.alexkaul.com/gh-backer/top/2/profile)
-[![Backer](https://mynode.alexkaul.com/gh-backer/top/3/avatar/60)](https://mynode.alexkaul.com/gh-backer/top/3/profile)
-[![Backer](https://mynode.alexkaul.com/gh-backer/top/4/avatar/60)](https://mynode.alexkaul.com/gh-backer/top/4/profile)
-[![Backer](https://mynode.alexkaul.com/gh-backer/top/5/avatar/60)](https://mynode.alexkaul.com/gh-backer/top/5/profile)
-[![Backer](https://mynode.alexkaul.com/gh-backer/top/6/avatar/60)](https://mynode.alexkaul.com/gh-backer/top/6/profile)
-[![Backer](https://mynode.alexkaul.com/gh-backer/top/7/avatar/60)](https://mynode.alexkaul.com/gh-backer/top/7/profile)
-[![Backer](https://mynode.alexkaul.com/gh-backer/top/8/avatar/60)](https://mynode.alexkaul.com/gh-backer/top/8/profile)
-[![Backer](https://mynode.alexkaul.com/gh-backer/top/9/avatar/60)](https://mynode.alexkaul.com/gh-backer/top/9/profile)
-
 ## Testing Node Set in Node-RED
 
 [Read Node-RED docs](https://nodered.org/docs/creating-nodes/first-node#testing-your-node-in-node-red) on how to install the node set into your Node-RED runtime.
 
 ## License
-
-MIT © Alex Kaul
+MIT
